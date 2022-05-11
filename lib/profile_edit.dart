@@ -42,15 +42,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     );
   }
 
-  Widget teksBesar(String teks) {
-    return Text(
-      teks,
-      style: const TextStyle(
-        fontSize: 20,
-      ),
-    );
-  }
-
   @override
   void dispose() {
     usernameController.dispose();
