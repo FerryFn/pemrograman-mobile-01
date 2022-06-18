@@ -1,4 +1,4 @@
-name: mobile_2009106051_ferry_fathurrahman
+name: uas_mobile_2009106051_ferry_fathurrahman
 description: A new Flutter project.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -6,35 +6,46 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
+  cloud_firestore: ^3.1.18
+  cupertino_icons: ^1.0.2
+  file_picker: ^4.6.1
+  firebase_auth: ^3.3.20
+  firebase_core: ^1.18.0
+  firebase_storage: ^10.2.18
   flutter:
     sdk: flutter
-
-  cupertino_icons: ^1.0.2
+  get: ^4.6.5
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.9.3
+  flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^1.0.0
+flutter_icons:
+  android: true
+  image_path: "assets/icon/cookfox.png"
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/
-  
+    - assets/icon/
+    - assets/landing_page/
+
   fonts:
-  - family: Quicksand
-    fonts:
-      - asset: fonts/Quicksand-Regular.ttf
-      - asset: fonts/Quicksand-Light.ttf
-        weight: 300
-      - asset: fonts/Quicksand-Regular.ttf
-        weight: 500
-      - asset: fonts/Quicksand-SemiBold.ttf
-        weight: 600
-      - asset: fonts/Quicksand-Bold.ttf
-        weight: 700
+    - family: Quicksand
+      fonts:
+        - asset: fonts/Quicksand-Regular.ttf
+        - asset: fonts/Quicksand-Light.ttf
+          weight: 300
+        - asset: fonts/Quicksand-Regular.ttf
+          weight: 500
+        - asset: fonts/Quicksand-SemiBold.ttf
+          weight: 600
+        - asset: fonts/Quicksand-Bold.ttf
+          weight: 700

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.mobile_2009106051_ferry_fathurrahman">
+    package="com.ferryf.uas_mobile_2009106051_ferry_fathurrahman">
    <application
-        android:label="mobile_2009106051_ferry_fathurrahman"
+        android:label="CookFox (UAS)"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
