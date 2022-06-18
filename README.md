@@ -127,7 +127,7 @@ Get.snackbar(
 ![](screenshot/snackbar2.png)
 
 ## API (GET)
-API yang digunakan pada aplikasi ini adalah Firebase.
+API yang digunakan pada aplikasi ini adalah Firebase. Salah satu kode yang digunakan untuk melakukan *read* data kemudian memasukkannya ke dalam *list* adalah sebagai berikut:
 ```dart
 ...
 await FirebaseFirestore.instance.collection("recipes").get().then(
@@ -151,8 +151,10 @@ await FirebaseFirestore.instance.collection("recipes").get().then(
     );
 ...
 ```
+![](screenshot/read.png)
 
 ## API (POST)
+Contoh POST ada pada saat menambahkan resep seperti pada *recipe_form_page.dart*:
 ```dart
 ...
 await FirebaseFirestore.instance.collection("recipes").add({
@@ -166,8 +168,11 @@ await FirebaseFirestore.instance.collection("recipes").add({
 });
 ...
 ```
+![](screenshot/post.png)
+![](screenshot/posted.png)
 
 ## API (UPDATE)
+Proses *update* dapat dilakukan dengan masuk halaman detail, kemudian menekan tombol edit (pensil). Contoh kode *update* pada aplikasi ini adalah sebagai berikut:
 ```dart
 ...
 await FirebaseFirestore.instance
@@ -182,13 +187,122 @@ await FirebaseFirestore.instance
 });
 ...
 ```
+![](screenshot/update.png)
 
 ## API (DELETE)
+Proses *delete* dapat dilakukan dengan masuk halaman detail, kemudian menekan tombol hapus (tong sampah). Kode *delete* pada aplikasi ini adalah sebagai berikut:
 ```dart
 ...
 await FirebaseFirestore.instance
     .collection("recipes")
     .doc(docName)
     .delete();
+...
+```
+
+## Pattern MVVM (Model View View-Model)
+Penggunaan pattern MVVM pada aplikasi ini berada di data resep. Data yang diambil dari Firebase akan dijadikan objek (model), kemudian dimasukkan ke dalam *List* (view-model) untuk ditampilkan kepada pengguna (view).
+Untuk kode model resep adalah sebagai berikut:
+```dart
+class Recipe {
+  String image;
+  String title;
+  String price;
+  String time;
+  String ingredients;
+  String steps;
+  RxBool bookmarked = false.obs;
+  String docName;
+
+  Recipe({
+    required this.image,
+    required this.title,
+    required this.price,
+    required this.time,
+    required this.ingredients,
+    required this.steps,
+    this.docName = "",
+    bool bookmarked = false,
+  }) {
+    if (bookmarked) {
+      this.bookmarked.value = true;
+    }
+  }
+}
+```
+
+Untuk kode view-model resep adalah sebagai berikut:
+```dart
+class RecipesController extends GetxController {
+  final RxList _recipes = [].obs;
+
+  @override
+  void onInit() {
+    getData();
+    super.onInit();
+  }
+
+  getData() async {
+    _recipes.clear();
+    await FirebaseFirestore.instance.collection("recipes").get().then(
+          (value) => {
+            for (var i in value.docs)
+              {
+                _recipes.add(
+                  Recipe(
+                    docName: i.id,
+                    title: i.get("title"),
+                    image: i.get("image"),
+                    time: i.get("time").toString(),
+                    price: i.get("price"),
+                    ingredients: i.get("ingredients"),
+                    steps: i.get("steps"),
+                    bookmarked: i.get("bookmarked"),
+                  ),
+                ),
+              },
+          },
+        );
+  }
+
+  List<Recipe> get recipes {
+    return [..._recipes];
+  }
+
+  List get bookmarkedRecipes {
+    return _recipes.where((item) => item.bookmarked.value).toList();
+  }
+
+  void removeRecipe(String docName) async {
+    final int index =
+        _recipes.indexWhere((recipe) => recipe.docName == docName);
+    _recipes.removeAt(index);
+  }
+...
+```
+Salah satu kode untuk melakukan *view* resep ada pada *home_page.dart* untuk dijadikan Card, yaitu sebagai berikut:
+```dart
+...
+Expanded(
+  child: Obx(
+    () => ListView.builder(
+      padding: const EdgeInsets.all(18),
+      itemCount: _recipes.recipes.length,
+      itemBuilder: (context, index) {
+        final recipe = _recipes.recipes[index];
+        return RecipeCard(
+          image: recipe.image,
+          title: recipe.title,
+          price: recipe.price,
+          time: recipe.time,
+          ingredients: recipe.ingredients,
+          steps: recipe.steps,
+          bookmarked: recipe.bookmarked.value,
+          docName: recipe.docName,
+        );
+      },
+    ),
+  ),
+),
 ...
 ```
